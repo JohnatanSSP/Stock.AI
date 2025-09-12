@@ -1,5 +1,7 @@
 package JohnatanSSP.Stock.AI.service;
 
+import JohnatanSSP.Stock.AI.DTO.ObjectDTO;
+import JohnatanSSP.Stock.AI.mapper.ObjectMapper;
 import JohnatanSSP.Stock.AI.model.ObjectItem;
 import JohnatanSSP.Stock.AI.repository.ObjectItemRepository;
 import org.springframework.stereotype.Service;
@@ -9,21 +11,33 @@ import java.util.List;
 @Service
 public class ObjectItemService {
 
-    private ObjectItemRepository Repository;
+    private final ObjectItemRepository repository;
+    private  final ObjectMapper mapper;
 
-    public ObjectItemService(ObjectItemRepository repository) {
-        Repository = repository;
-    }
-
-    public ObjectItem saveObject(ObjectItem object) {
-        return Repository.save(object);
+    public ObjectItemService(ObjectMapper mapper, ObjectItemRepository repository){
+        this.mapper = mapper;
+        this.repository = repository;
     }
 
-    public List<ObjectItem> showAll(ObjectItem object) {
-        return Repository.showAll();
+
+    public ObjectDTO saveObject(ObjectDTO objectDTO) {
+        ObjectItem object = new ObjectMapper().map(objectDTO);
+        object = repository.save(object);
+        return mapper.map(object);
     }
-    public ObjectItem showById(Long id) {
-        return Repository.showById(id);
+
+    public List<ObjectDTO> showAll() {
+        return repository.findAll();
     }
+    public ObjectDTO showById(Long id) {
+        return repository.findById(id);
+    }
+    public void delete(Long id){
+        repository.deleteById(id);
+    }
+    public ObjectItem update(ObjectItem object) {
+        return repository.save(object);
+    }
+
 }
 
