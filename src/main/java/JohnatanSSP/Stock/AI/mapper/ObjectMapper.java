@@ -8,8 +8,9 @@ import org.springframework.stereotype.Component;
 public class ObjectMapper {
 
     // DTO -> Entity
-    public static ObjectItem map(ObjectDTO dto) {
+    public ObjectItem toEntity(ObjectDTO dto) {
         if (dto == null) return null;
+
         ObjectItem obj = new ObjectItem();
         obj.setId(dto.getId());
         obj.setName(dto.getName());
@@ -23,7 +24,8 @@ public class ObjectMapper {
     }
 
     // Entity -> DTO
-    public static ObjectDTO map(ObjectItem obj) {
+    public ObjectDTO toDTO(ObjectItem obj) {
+        if (obj == null) return null;
 
         ObjectDTO objectDTO = new ObjectDTO();
         objectDTO.setId(obj.getId());
@@ -37,4 +39,4 @@ public class ObjectMapper {
 
         return objectDTO;
     }
-    }
+}

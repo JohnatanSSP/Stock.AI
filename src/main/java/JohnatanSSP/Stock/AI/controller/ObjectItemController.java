@@ -5,6 +5,7 @@ import JohnatanSSP.Stock.AI.model.ObjectItem;
 import JohnatanSSP.Stock.AI.service.ObjectItemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,8 +43,14 @@ public class ObjectItemController {
     @PostMapping
     public ResponseEntity<String> create(@RequestBody ObjectDTO object){
 
-        ObjectDTO newObject = service.saveObject(object);
+        ObjectDTO newObject = service.create(object);
         return ResponseEntity.ok("saved");
+    }
+
+    @PostMapping
+    public ResponseEntity<ObjectDTO> createObject(@Validated @RequestBody ObjectDTO objectDTO) {
+        ObjectDTO savedObject = service.create(objectDTO);
+        return ResponseEntity.ok(savedObject);
     }
 
     //update
