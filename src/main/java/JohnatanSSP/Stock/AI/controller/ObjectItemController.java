@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/stock")
@@ -21,7 +22,7 @@ public class ObjectItemController {
     }
 
     //get ALL
-    @GetMapping
+    @GetMapping("/show_all")
     public ResponseEntity<List<ObjectDTO>> ShowAll(){
         List<ObjectDTO> objects = service.showAll();
         return ResponseEntity.status(HttpStatus.OK)
@@ -40,20 +41,25 @@ public class ObjectItemController {
         }
     }
     //create
-    @PostMapping
-    public ResponseEntity<String> create(@RequestBody ObjectDTO object){
-
-        ObjectDTO newObject = service.create(object);
-        return ResponseEntity.ok("saved");
-    }
-
-    @PostMapping
-    public ResponseEntity<ObjectDTO> createObject(@Validated @RequestBody ObjectDTO objectDTO) {
-        ObjectDTO savedObject = service.create(objectDTO);
-        return ResponseEntity.ok(savedObject);
+    @PutMapping("/{id}")
+    public ResponseEntity<ObjectDTO> update(@Validated @RequestBody ObjectDTO DTO, @PathVariable Long id) {
+        ObjectDTO updatedObject = service.update(id, DTO);
+        return ResponseEntity.ok(updatedObject);
     }
 
     //update
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ObjectDTO newBook){
+
+        ObjectDTO book = service.update(id, newBook);
+        if(book == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Object not found");
+        }else  {
+            return ResponseEntity.ok().body("updated successfully");
+
+        }
+    }
 
     //delete
     @DeleteMapping("/{id}")
