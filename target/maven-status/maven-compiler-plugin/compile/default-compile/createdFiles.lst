@@ -1,0 +1,8 @@
+JohnatanSSP\Stock\AI\enums\category.class
+JohnatanSSP\Stock\AI\controller\ObjectItemController.class
+JohnatanSSP\Stock\AI\DTO\ObjectDTO.class
+JohnatanSSP\Stock\AI\Application.class
+JohnatanSSP\Stock\AI\model\ObjectItem.class
+JohnatanSSP\Stock\AI\service\ObjectItemService.class
+JohnatanSSP\Stock\AI\repository\ObjectItemRepository.class
+JohnatanSSP\Stock\AI\mapper\ObjectMapper.class
