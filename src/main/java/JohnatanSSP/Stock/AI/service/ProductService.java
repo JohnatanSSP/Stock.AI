@@ -1,9 +1,9 @@
 package JohnatanSSP.Stock.AI.service;
 
-import JohnatanSSP.Stock.AI.DTO.ObjectDTO;
-import JohnatanSSP.Stock.AI.mapper.ObjectMapper;
-import JohnatanSSP.Stock.AI.model.ObjectItem;
-import JohnatanSSP.Stock.AI.repository.ObjectItemRepository;
+import JohnatanSSP.Stock.AI.DTO.ProductDTO;
+import JohnatanSSP.Stock.AI.mapper.ProductMapper;
+import JohnatanSSP.Stock.AI.model.ProductModel;
+import JohnatanSSP.Stock.AI.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,14 +12,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class ObjectItemService {
+public class ProductService {
 
     @Autowired
-    private final ObjectItemRepository repository;
+    private final ProductRepository repository;
     @Autowired
-    private final ObjectMapper mapper;
+    private final ProductMapper mapper;
 
-    public ObjectItemService(ObjectMapper mapper, ObjectItemRepository repository){
+    public ProductService(ProductMapper mapper, ProductRepository repository){
         this.mapper = mapper;
         this.repository = repository;
     }
@@ -32,32 +32,32 @@ public class ObjectItemService {
 //        return mapper.toDTO(object);
 //    }
 //
-    public ObjectDTO create(ObjectDTO objectDTO){
-        ObjectItem object = new ObjectItem();
+    public ProductDTO create(ProductDTO productDTO){
+        ProductModel object = new ProductModel();
         object = repository.save(object);
         return mapper.toDTO(object);
     }
 
-    public List<ObjectDTO> showAll() {
-        List<ObjectItem> objects = repository.findAll();
+    public List<ProductDTO> showAll() {
+        List<ProductModel> objects = repository.findAll();
         return objects.stream()
                 .map(object -> mapper.toDTO(object))
                 .collect(Collectors.toList());
     }
 
-    public ObjectDTO showById(Long id) {
-        Optional<ObjectItem> object = repository.findById(id);
+    public ProductDTO showById(Long id) {
+        Optional<ProductModel> object = repository.findById(id);
         return mapper.toDTO(object.get());
     }
     public void delete(Long id){
         repository.deleteById(id);
     }
-    public ObjectDTO update(Long id,ObjectDTO object) {
-        Optional<ObjectItem> objectItem = repository.findById(id);
+    public ProductDTO update(Long id, ProductDTO object) {
+        Optional<ProductModel> objectItem = repository.findById(id);
         if(objectItem.isPresent()){
-            ObjectItem newObject = mapper.toEntity(object);
+            ProductModel newObject = mapper.toEntity(object);
             newObject.setId(id);
-            ObjectItem updatedObject = repository.save(newObject);
+            ProductModel updatedObject = repository.save(newObject);
             return mapper.toDTO(updatedObject);
         }
         return null;

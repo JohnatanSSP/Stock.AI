@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ObjectDTO {
+public class ProductDTO {
     // DTO para criar/atualizar
     private Long id;
     private String name;
