@@ -1,30 +1,28 @@
 package JohnatanSSP.Stock.AI.controller;
 
-import JohnatanSSP.Stock.AI.DTO.ObjectDTO;
-import JohnatanSSP.Stock.AI.model.ObjectItem;
-import JohnatanSSP.Stock.AI.service.ObjectItemService;
+import JohnatanSSP.Stock.AI.DTO.ProductDTO;
+import JohnatanSSP.Stock.AI.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/stock")
-public class ObjectItemController {
+public class ProductController {
 
-    private final ObjectItemService service;
+    private final ProductService service;
 
-    public ObjectItemController(ObjectItemService service) {
+    public ProductController(ProductService service) {
         this.service = service;
     }
 
     //get ALL
     @GetMapping("/show_all")
-    public ResponseEntity<List<ObjectDTO>> ShowAll(){
-        List<ObjectDTO> objects = service.showAll();
+    public ResponseEntity<List<ProductDTO>> ShowAll(){
+        List<ProductDTO> objects = service.showAll();
         return ResponseEntity.status(HttpStatus.OK)
                 .body(objects);
     }
@@ -32,7 +30,7 @@ public class ObjectItemController {
     //get by ID
     @GetMapping("/id")
     public ResponseEntity<?> showById(@PathVariable Long id){
-        ObjectDTO object = service.showById(id);
+        ProductDTO object = service.showById(id);
         if (object == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("not found");
@@ -42,16 +40,16 @@ public class ObjectItemController {
     }
     //create
     @PutMapping("/{id}")
-    public ResponseEntity<ObjectDTO> update(@Validated @RequestBody ObjectDTO DTO, @PathVariable Long id) {
-        ObjectDTO updatedObject = service.update(id, DTO);
+    public ResponseEntity<ProductDTO> update(@Validated @RequestBody ProductDTO DTO, @PathVariable Long id) {
+        ProductDTO updatedObject = service.update(id, DTO);
         return ResponseEntity.ok(updatedObject);
     }
 
     //update
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ObjectDTO newBook){
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ProductDTO newBook){
 
-        ObjectDTO book = service.update(id, newBook);
+        ProductDTO book = service.update(id, newBook);
         if(book == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Object not found");
