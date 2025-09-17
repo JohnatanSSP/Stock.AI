@@ -14,54 +14,50 @@ import java.util.stream.Collectors;
 @Service
 public class ProductService {
 
-    @Autowired
     private final ProductRepository repository;
-    @Autowired
     private final ProductMapper mapper;
 
-    public ProductService(ProductMapper mapper, ProductRepository repository){
+    @Autowired
+    public ProductService(ProductMapper mapper, ProductRepository repository) {
         this.mapper = mapper;
         this.repository = repository;
     }
 
-
-
-//    public ObjectDTO saveObject(ObjectDTO objectDTO) {
-//        ObjectItem object = mapper.toEntity(objectDTO);
-//        object = repository.save(object);
-//        return mapper.toDTO(object);
-//    }
-//
-    public ProductDTO create(ProductDTO productDTO){
-        ProductModel object = new ProductModel();
-        object = repository.save(object);
-        return mapper.toDTO(object);
+    // CREATE
+    public ProductDTO create(ProductModel product) {
+        ProductModel entity = mapper.toEntity(product);
+        ProductModel saved = repository.save(entity);
+        return mapper.toDTO(saved);
     }
 
+    // READ ALL
     public List<ProductDTO> showAll() {
-        List<ProductModel> objects = repository.findAll();
-        return objects.stream()
-                .map(object -> mapper.toDTO(object))
+        return repository.findAll().stream()
+                .map(mapper::toDTO)
                 .collect(Collectors.toList());
     }
 
+    // READ BY ID
     public ProductDTO showById(Long id) {
-        Optional<ProductModel> object = repository.findById(id);
-        return mapper.toDTO(object.get());
-    }
-    public void delete(Long id){
-        repository.deleteById(id);
-    }
-    public ProductDTO update(Long id, ProductDTO object) {
-        Optional<ProductModel> objectItem = repository.findById(id);
-        if(objectItem.isPresent()){
-            ProductModel newObject = mapper.toEntity(object);
-            newObject.setId(id);
-            ProductModel updatedObject = repository.save(newObject);
-            return mapper.toDTO(updatedObject);
-        }
-        return null;
+        return repository.findById(id)
+                .map(mapper::toDTO)
+                .orElse(null);
     }
 
+    // DELETE
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }
+
+    // UPDATE
+    public ProductDTO update(Long id, ProductModel dto) {
+        return repository.findById(id)
+                .map(existing -> {
+                    ProductModel updated = mapper.toEntity(dto);
+                    updated.setId(id);
+                    return mapper.toDTO(repository.save(updated));
+                })
+                .orElse(null);
+    }
 }
 

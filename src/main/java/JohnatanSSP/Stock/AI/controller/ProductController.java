@@ -1,6 +1,7 @@
 package JohnatanSSP.Stock.AI.controller;
 
 import JohnatanSSP.Stock.AI.DTO.ProductDTO;
+import JohnatanSSP.Stock.AI.model.ProductModel;
 import JohnatanSSP.Stock.AI.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,17 @@ public class ProductController {
 
     public ProductController(ProductService service) {
         this.service = service;
+    }
+
+    // create
+    @PostMapping("/create")
+    public ResponseEntity<?> save(@Validated @RequestBody ProductModel product) {
+        ProductDTO savedProduct = service.create(product);
+        if (savedProduct == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to save product");
+        } else {
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
+        }
     }
 
     //get ALL
@@ -40,16 +52,16 @@ public class ProductController {
     }
     //create
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDTO> update(@Validated @RequestBody ProductDTO DTO, @PathVariable Long id) {
+    public ResponseEntity<ProductDTO> update(@Validated @RequestBody ProductModel DTO, @PathVariable Long id) {
         ProductDTO updatedObject = service.update(id, DTO);
         return ResponseEntity.ok(updatedObject);
     }
 
     //update
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ProductDTO newBook){
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ProductModel newProduct){
 
-        ProductDTO book = service.update(id, newBook);
+        ProductDTO book = service.update(id, newProduct);
         if(book == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Object not found");
