@@ -11,6 +11,8 @@ stock.mv.db
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
+*.db
+
 # Package Files #
 *.jar
 *.war
