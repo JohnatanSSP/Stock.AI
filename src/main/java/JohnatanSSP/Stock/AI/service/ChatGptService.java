@@ -1,7 +1,7 @@
 package JohnatanSSP.Stock.AI.service;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.server.reactive.HttpHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -12,25 +12,25 @@ import java.util.Map;
 @Service
 public class ChatGptService {
 
-    private final WebClient webClient;
+    private final WebClient Client;
     private String apiKey = System.getenv("API_KEY");
 
-    public ChatGptService(WebClient webClient) {
-        this.webClient = webClient;
+    public ChatGptService(WebClient Client) {
+        this.Client = Client;
     }
 
     public Mono<String> generateReport(){
         String prompt = "quero que voce analise os items que irei fornecer e me faça um relatorio do meu estoque";
         Map<String, Object> requestBody = Map.of(
-                "model", "gpt-5-nano",
+                "model", "gpt-5",
                 "messages", List.of(
                         Map.of("role","system","content","voce e um analista de estoque e cria relatorios"),
                         Map.of("role","user", "content", prompt)
                 )
         );
-        return webClient.post()
-                .header(HttpHandler.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .header(HttpHandler.AUTHORIZATION, "Bearer" + apiKey)
+        return Client.post()
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey)
                 .bodyValue(requestBody)
                 .retrieve()
                 .bodyToMono(Map.class)
