@@ -1,5 +1,6 @@
 package JohnatanSSP.Stock.AI.service;
 
+import JohnatanSSP.Stock.AI.DTO.ProductDTO;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -8,21 +9,28 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ChatGptService {
 
     private final WebClient Client;
-    private String apiKey = System.getenv("API_KEY");
+    private final String apiKey = System.getenv("OPENAI_API_KEY");
 
     public ChatGptService(WebClient Client) {
         this.Client = Client;
     }
 
-    public Mono<String> generateReport(){
-        String prompt = "quero que voce analise os items que irei fornecer e me faça um relatorio do meu estoque";
+    public Mono<String> generateReport(List<ProductDTO> Model){
+
+        String stock = Model.stream()
+                .map(item -> String.format("%s (%s) - quantidade: %d, Validade: %s",
+                        item.getName(),item.getCategory(), item.getQuantity(), item.getValidity(), item.getPrice()))
+                .collect(Collectors.joining("\n"));
+
+        String prompt = "quero que voce analise os items que irei fornecer e me faça um relatorio do meu estoque:\n " + stock;
         Map<String, Object> requestBody = Map.of(
-                "model", "gpt-5",
+                "model", "gpt-4o-mini",
                 "messages", List.of(
                         Map.of("role","system","content","voce e um analista de estoque e cria relatorios"),
                         Map.of("role","user", "content", prompt)

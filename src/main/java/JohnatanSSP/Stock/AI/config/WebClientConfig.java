@@ -16,4 +16,3 @@ public class WebClientConfig {
         return builder.baseUrl(ChatGptUrl).build();
     }
 }
-

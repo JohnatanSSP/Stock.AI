@@ -25,7 +25,6 @@ public class ProductMapper {
     // Entity -> DTO
     public ProductDTO toDTO(ProductModel obj) {
         if (obj == null) return null;
-
         ProductDTO productDTO = new ProductDTO();
         productDTO.setName(obj.getName());
         productDTO.setPrice(obj.getPrice());
