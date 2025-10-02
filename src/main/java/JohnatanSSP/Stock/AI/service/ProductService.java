@@ -32,16 +32,14 @@ public class ProductService {
 
     // READ ALL
     public List<ProductDTO> showAll() {
-        return repository.findAll().stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<ProductModel> list = repository.findAll();
+        return list.stream().map(mapper::toDTO).collect(Collectors.toList());
     }
 
     // READ BY ID
     public ProductDTO showById(Long id) {
-        return repository.findById(id)
-                .map(mapper::toDTO)
-                .orElse(null);
+        Optional<ProductModel> optional = repository.findById(id);
+        return optional.map(mapper::toDTO).orElse(null);
     }
 
     // DELETE
@@ -51,13 +49,15 @@ public class ProductService {
 
     // UPDATE
     public ProductDTO update(Long id, ProductModel dto) {
-        return repository.findById(id)
-                .map(existing -> {
-                    ProductModel updated = mapper.toEntity(dto);
-                    updated.setId(id);
-                    return mapper.toDTO(repository.save(updated));
-                })
-                .orElse(null);
+        Optional<ProductModel> entity = repository.findById(id);
+
+        if (entity.isPresent()) {
+            ProductModel updated = mapper.toEntity(dto);
+            updated.setId(id);
+            repository.save(updated);
+            return mapper.toDTO(updated);
+        }
+        return null;
     }
 }
 

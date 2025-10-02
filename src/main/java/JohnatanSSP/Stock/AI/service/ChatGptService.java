@@ -1,6 +1,7 @@
 package JohnatanSSP.Stock.AI.service;
 
 import JohnatanSSP.Stock.AI.DTO.ProductDTO;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -29,27 +30,22 @@ public class ChatGptService {
                 .collect(Collectors.joining("\n"));
 
         String prompt = "quero que voce analise os items que irei fornecer e me faça um relatorio do meu estoque:\n " + stock;
-        Map<String, Object> requestBody = Map.of(
-                "model", "gpt-4o-mini",
-                "messages", List.of(
-                        Map.of("role","system","content","voce e um analista de estoque e cria relatorios"),
-                        Map.of("role","user", "content", prompt)
-                )
-        );
+
         return Client.post()
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey)
-                .bodyValue(requestBody)
+                .bodyValue(Map.of(
+                        "model", "gpt-4o-mini",
+                        "input", prompt
+                ))
                 .retrieve()
-                .bodyToMono(Map.class)
-                .map(response -> {
-                    var choices = (List<Map<String, Object>>) response.get("choices");
-                    if(choices != null && !choices.isEmpty()){
-                        Map<String, Object> message = (Map<String, Object>) choices.get(0).get("message");
-                        return message.get("content").toString();
-                    }
-                    return "não foi possivel realizar";
-                });
+                .bodyToMono(JsonNode.class)
+                .map(json -> {
+                    JsonNode textNode = json.path("output")
+                            .get(0).path("content").get(0).path("text");
+                    return textNode.isMissingNode() ? "não encontramos nenhuma resposta" : textNode.asText();
+                        }
+                );
     }
 
 }
