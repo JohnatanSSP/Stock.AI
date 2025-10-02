@@ -4,6 +4,7 @@ import JohnatanSSP.Stock.AI.DTO.ProductDTO;
 import JohnatanSSP.Stock.AI.service.ChatGptService;
 import JohnatanSSP.Stock.AI.service.ProductService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
@@ -11,10 +12,11 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 public class StockController {
 
     private final ChatGptService chatGptService;
-    private  ProductService productService;
+    private final ProductService productService;
 
     public StockController(ChatGptService chatGptService, ProductService productService) {
         this.chatGptService = chatGptService;
