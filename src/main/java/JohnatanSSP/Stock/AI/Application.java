@@ -7,7 +7,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+
+//        io.github.cdimascio.dotenv.Dotenv dotenv = io.github.cdimascio.dotenv.Dotenv.load();
+//        dotenv.entries().forEach(e -> System.setProperty(e.getKey(), e.getValue()));
+
+        SpringApplication.run(Application.class, args);
 	}
 
 }
