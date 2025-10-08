@@ -1,25 +1,33 @@
 package JohnatanSSP.Stock.AI.controller;
 
-import dev.langchain4j.model.chat.ChatModel;
+import JohnatanSSP.Stock.AI.DTO.ProductDTO;
+import JohnatanSSP.Stock.AI.service.LangChainService;
 import org.springframework.web.bind.annotation.*;
-import dev.langchain4j.model.openai.OpenAiChatModel; // depende da implementação que quer usar
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/langchain-openai")
+@RequestMapping("/langchain")
 public class LangChainController {
 
-    ChatModel chatModel;
-    public LangChainController(ChatModel chatModel) {
-        this.chatModel = chatModel;
+    private final LangChainService langChainService;
+
+    public LangChainController(LangChainService langChainService) {
+        this.langChainService = langChainService;
     }
 
-    @GetMapping
-    public String reportLangChain(@RequestBody String product){
-        return chatModel.chat(product);
+    /**
+     * Gera um relatório do estoque com base em uma lista de produtos.
+     * Exemplo de requisição:
+     * POST /langchain/report
+     * Body: [
+     *   {"name":"Arroz","category":"Alimentos","quantity":10,"validity":"2025-12-31"},
+     *   {"name":"Feijão","category":"Alimentos","quantity":5,"validity":"2025-11-20"}
+     * ]
+     */
+    @GetMapping(value = "/report", consumes = "application/json", produces = "application/json")
+    public Mono<String> generateReport(@RequestBody List<ProductDTO> products) {
+        return langChainService.generateReport(products);
     }
-
 }

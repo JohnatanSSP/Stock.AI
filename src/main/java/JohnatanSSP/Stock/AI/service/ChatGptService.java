@@ -25,15 +25,16 @@ public class ChatGptService {
     public Mono<String> generateReport(List<ProductDTO> Model){
 
         String stock = Model.stream()
-                .map(item -> String.format("%s (%s) - quantidade: %d, Validade: %s",
-                        item.getName(),item.getCategory(), item.getQuantity(), item.getValidity(), item.getPrice()))
+                .map(item -> String.format(
+                        item.getName(),item.getDescription(), item.getQuantity()))
                 .collect(Collectors.joining("\n"));
 
-        String prompt = "quero que voce analise os items que irei fornecer e me faça um relatorio do meu estoque:\n " + stock;
+        String prompt = "quero que voce analise o meu estoque...\n " + stock;
+        prompt = prompt.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
 
         return Client.post()
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey)
+                .header("Content-Type", "application/json")
+                .header("Authorization","Bearer" + apiKey)
                 .bodyValue(Map.of(
                         "model", "gpt-4o-mini",
                         "input", prompt

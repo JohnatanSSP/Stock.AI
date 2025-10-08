@@ -32,3 +32,7 @@ Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: The connection wa
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:690)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
 	... 16 more
+2025-10-07 17:55:58.838673-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DELETE FROM TB_OBJECTS\000d\000aWHERE ID = 37[*]TB_OBJECTS"; SQL statement:
+DELETE FROM TB_OBJECTS
+WHERE ID = 37TB_OBJECTS [42000-232]

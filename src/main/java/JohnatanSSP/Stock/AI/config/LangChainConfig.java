@@ -1,23 +1,18 @@
 package JohnatanSSP.Stock.AI.config;
 
-import dev.langchain4j.model.chat.ChatModel;
-import dev.langchain4j.model.openai.OpenAiChatModel; // depende da implementação que quer usar
-import org.springframework.beans.factory.annotation.Value;
+import dev.langchain4j.model.openai.OpenAiChatModel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class LangChainConfig {
 
-    @Value("${langchain4j.open-ai.moderation-model.api-key}")
-    private String apiKey;
-
-
     @Bean
-    public ChatModel chatModel() {
+    public OpenAiChatModel chatLanguageModel() {
         return OpenAiChatModel.builder()
-                .apiKey(apiKey) // ou ler do application.properties
+                .apiKey(System.getenv("OPENAI_API_KEY"))
                 .modelName("gpt-4o-mini")
+                .temperature(0.7)
                 .build();
     }
 }
