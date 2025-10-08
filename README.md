@@ -19,22 +19,29 @@ Stock.AI é uma aplicação Java Spring Boot que integra **inteligência artific
 
 ---
 
-## 📂 Estrutura do projeto
-
 src/main/java/JohnatanSSP/Stock/AI/
 ├── controller/
-
-│ └── LangChainController.java # Recebe JSON com lista de produtos e retorna relatório
+│   └── LangChainController.java
+│       └─ Responsável por expor os endpoints da API.
+│          Recebe JSON com lista de produtos, envia para o serviço e retorna
+│          o relatório gerado pela IA.
 ├── service/
-
-│ └── LangChainService.java # Monta o prompt e chama o LangChain
+│   └── LangChainService.java
+│       └─ Contém a lógica de negócio relacionada ao LangChain.
+│          Monta o prompt com os produtos recebidos e chama o modelo
+│          OpenAI para gerar o relatório.
 ├── DTO/
-
-│ └── ProductDTO.java # Mapeia cada produto enviado
+│   └── ProductDTO.java
+│       └─ Data Transfer Object que representa cada produto.
+│          Contém campos como name, category, quantity, validity e price.
 ├── config/
+│   └── LangChainConfig.java
+│       └─ Configuração do bean OpenAiChatModel para integração
+│          com o OpenAI GPT. Define API key, modelo e temperatura.
+└── StockAiApplication.java
+    └─ Classe principal do Spring Boot. Inicializa a aplicação
+       e configura o contexto do Spring.
 
-│ └── LangChainConfig.java # Configura OpenAiChatModel
-└── StockAiApplication.java # Classe principal Spring Boot
 
 
 ---
