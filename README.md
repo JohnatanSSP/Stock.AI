@@ -23,12 +23,16 @@ Stock.AI é uma aplicação Java Spring Boot que integra **inteligência artific
 
 src/main/java/JohnatanSSP/Stock/AI/
 ├── controller/
+
 │ └── LangChainController.java # Recebe JSON com lista de produtos e retorna relatório
 ├── service/
+
 │ └── LangChainService.java # Monta o prompt e chama o LangChain
 ├── DTO/
+
 │ └── ProductDTO.java # Mapeia cada produto enviado
 ├── config/
+
 │ └── LangChainConfig.java # Configura OpenAiChatModel
 └── StockAiApplication.java # Classe principal Spring Boot
 
